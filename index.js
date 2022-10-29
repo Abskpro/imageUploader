@@ -4,7 +4,7 @@ const home = require("./routes/home");
 const cors = require("cors");
 
 const bodyParser = require("body-parser");
-// const ImageRouter = require("./router");
+const ImageRouter = require("./router");
 
 
 
@@ -35,6 +35,13 @@ app.use(express.json());
 
 // Routes
 app.use("/home", home);
+app.use("/api", ImageRouter);
+app.get("/", (req, res) => {
+  res.json({ message: "hellow roasd" }).end();
+});
+
+
+
 
 // connection
 const port = process.env.PORT || 9001;
