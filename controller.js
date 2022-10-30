@@ -9,28 +9,26 @@ const { cloudinary } = require("./config/cloudinary");
  * @param {} next
  */
 const uploadImage = async (req, res, next) => {
-    let _ = req.body;
-    try {
-        const datas = JSON.parse(_.imageCollection);
-        const arr = [];
-        await Promise.all(
-            datas.map(async (data) => {
-                let id = uuidv4();
-                arr.push(id); let response = cloudinary.uploader.upload(data, {
-                    upload_preset: "dev_setups", // changes will be made later on
-                    public_id: id,
-                });
-                return response;
-            })
-        ).then(() => {
-          console.log(arr);
-          res.json({url: "id"})
-        });
-    } catch (err) {
-        res.status(500).json({ err: err });
-    }
+  let _ = req.body;
+  try {
+    const arr = [];
+    await Promise.all(
+        _.imageCollection.map(async (data) => {
+            let id = uuidv4();
+            arr.push(id); let response = cloudinary.uploader.upload(data, {
+                folder: 'images',
+                upload_preset: "dev_setups", // changes will be made later on
+                public_id: id,
+            });
+            return response;
+        })
+    ).then(() => {
+      res.json({url: arr})
+    });
+  } catch (err) {
+    console.log("Error is ", err);
+    res.status(500).json({ err: err });
+  }
 };
 
-module.exports = {uploadImage};
-
-
+module.exports = { uploadImage };
